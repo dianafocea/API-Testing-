@@ -4,7 +4,6 @@ import pytest
 from books.requests_api.orders import *
 from books.requests_api.api_clients import *
 
-
 class TestOrders:
     def setup_method(self):
         self.token = get_token()
@@ -30,13 +29,7 @@ class TestOrders:
         # cleanup
         delete_order(self.token, add1.json()['orderId'])
         delete_order(self.token, add2.json()['orderId'])
-    # ----------------------------------------------------------------------------------------------------
-    # ----------------------------------------------------------------------------------------------------
 
-            
-            
-    
-    # ----------------------------------------------------------------------------------------------------
     def test_delete_order(self):
         add = add_order(self.token, 4, "Diana")
         response = delete_order(self.token, add.json()['orderId'])
@@ -44,12 +37,6 @@ class TestOrders:
         # verify if order is deleted
         verify = get_orders(self.token)
         assert len(verify.json()) == 0, 'Order was not deleted'
-    # ----------------------------------------------------------------------------------------------------
-   
-
-    # ----------------------------------------------------------------------------------------------------
-
-
 
     def test_get_one_order(self):
         order = add_order(self.token, 1, 'DiaAnna').json()['orderId']
@@ -63,13 +50,10 @@ class TestOrders:
         # cleanup
         delete_order(self.token, order)
 
-
     def test_delete_invalid_orderId(self):
         response = delete_order(self.token, 'querty5')
         assert response.status_code == 404, 'Status code is not OK'
         assert response.json()['error'] == 'No order with id querty5.', 'The error returned is not correct'
-
-
 
     def test_get_order_invalid_id(self):
         response = get_order(self.token, 'e455e4')
