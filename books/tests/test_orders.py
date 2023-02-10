@@ -1,6 +1,6 @@
 import requests
 import json
-import pytest
+
 from books.requests_api.orders import *
 from books.requests_api.api_clients import *
 

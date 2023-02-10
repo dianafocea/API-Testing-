@@ -2,6 +2,7 @@ import pytest
 
 from books.requests_api.api_clients import *
 
+
 class TestApiClient:
     nr = randint(1, 9999999)
     clientName = 'Diana2'
@@ -14,9 +15,8 @@ class TestApiClient:
         assert self.response.status_code == 201, 'Actual status code is incorrect'
         assert 'accessToken' in self.response.json().keys(), 'Token property is not present in the response'
 
-
     def test_invalid_client_name(self):
-        self.response = login("5", "email@email.com")
+        self.response = login("", "test@email.com")
         assert self.response.status_code == 400, 'Actual status code is incorrect'
         assert self.response.json()['error'] == 'Invalid or missing client name.', 'Wrong message error was returned'
 
@@ -65,14 +65,30 @@ class TestApiClient:
         assert self.response.status_code == 400, 'Actual status code is incorrect'
         assert self.response.json()['error'] == 'Invalid or missing client name.', 'Wrong message error was returned'
 
-param = [
-    ('', 'test@e.com'),
-    ('2', 'test.com'),
-    (' ', 'test@domain'),
-    ('test_', 'test@')
-]
-@pytest.mark.parametrize('username, user_email', param)
-def test_invalid_email_param(username, user_email):
-    response = login("username", "user_email")
-    assert response.status_code == 400, 'Actual status code is incorrect'
-    assert response.json()['error'] == 'Invalid or missing client email.', 'Wrong message error was returned'
+    param = [
+        ('', 'test@email.com'),
+        ('return_eroare!', 't'),
+        ('return_eroare!', 'test@email.com'),
+
+        ('2', 'test.com'),
+        ('tst', 'test.'),
+        ('2', 'test.com'),
+        (' ', 'test@domain'),
+        ('!', 'test@')
+
+    ]
+
+    @pytest.mark.parametrize('username, user_email', param)
+    def test_invalid_email_param(self, username, user_email):
+        self.response = login("username", "user_email")
+        assert self.response.status_code == 400, 'Actual status code is incorrect'
+        assert self.response.json()['error'] == 'Invalid or missing client email.', 'Wrong message error was returned'
+
+    def test_invalid_client_n2ame(self):
+        self.response = login("return_eroare", "test@email.com")
+        assert self.response.status_code == 400, 'Actual status code is incorrect'
+        assert self.response.json()['error'] == 'Invalid or missing client name.', 'Wrong message error was returned'
+    def test_invalid_client_n3ame(self):
+        self.response = login("return_eroare", "t")
+        assert self.response.status_code == 400, 'Actual status code is incorrect'
+        assert self.response.json()['error'] == 'Invalid or missing client name.', 'Wrong message error was returned'
