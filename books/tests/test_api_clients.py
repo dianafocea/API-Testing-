@@ -69,7 +69,6 @@ class TestApiClient:
         ('', 'test@email.com'),
         ('return_eroare!', 't'),
         ('return_eroare!', 'test@email.com'),
-
         ('2', 'test.com'),
         ('tst', 'test.'),
         ('2', 'test.com'),
@@ -83,6 +82,7 @@ class TestApiClient:
         self.response = login("username", "user_email")
         assert self.response.status_code == 400, 'Actual status code is incorrect'
         assert self.response.json()['error'] == 'Invalid or missing client email.', 'Wrong message error was returned'
+
 
     def test_invalid_client_n2ame(self):
         self.response = login("return_eroare", "test@email.com")
